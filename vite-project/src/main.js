@@ -3,6 +3,7 @@ import { startRouter } from './app/router.js';
 import { renderHeader } from './ui/components/header.js';
 import { sidebar } from './ui/components/sidebar.js';
 import { ConnexionServices } from './data/service/connexionService.js';
+import { getLoggedUser } from './utils/format/auth.js';
 
 const root = document.getElementById('app');
 startRouter(root, {
@@ -67,40 +68,40 @@ function renderLayoutIfNeeded() {
 //         }
 //     }
 // }
-// 🔁Quand on charge la page ou qu'on change de hash
-// window.addEventListener('DOMContentLoaded', afficherMenusSelonRole);
-// window.addEventListener('hashchange', afficherMenusSelonRole);
 
-//  Gestion du bouton logout
-// const btnLogout = document.querySelector('#logout');
-// if (btnLogout) {
-//   btnLogout.addEventListener('click', () => {
-//     connexionServices.logout();
-//   });
-// }
+// 🔁Quand on charge la page ou qu'on change de hash
+
+window.addEventListener('DOMContentLoaded', afficherMenusSelonRole);
+window.addEventListener('hashchange', afficherMenusSelonRole);
 
 //  Masquer/afficher les liens selon le rôle
-// function afficherMenusSelonRole() {
-//   const user = JSON.parse(localStorage.getItem('user'));
 
+function afficherMenusSelonRole() {
 
-  // const menuAdmin = document.querySelectorAll('.menu-admin');
-  // const menuMedcin = document.querySelectorAll('.menu-medcin');
-  // const menuPersonnel = document.querySelectorAll('.menu-personnel');
+  const user = getLoggedUser();
 
-//   // Masquer tous les menus d'abord
-//   menuAdmin.forEach(el => (el.style.display = 'none'));
-//   menuBoutiquier.forEach(el => (el.style.display = 'none'));
+  const menuAdmin = document.querySelectorAll('.admin');
+  const menuMedcin = document.querySelectorAll('.medcin');
+  const menuPersonnel = document.querySelectorAll('.personnel');
 
-//   if (!user) return;
+  // Masquer tous les menus d'abord
+  menuAdmin.forEach(el => (el.style.display = 'none'));
+  menuMedcin.forEach(el => (el.style.display = 'none'));
+  menuPersonnel.forEach(el => (el.style.display = 'none'));
 
-//   const role = user.id_role;
+  if (!user) return;
 
-//   if (role == 1) {
-//     menuAdmin.forEach(el => (el.style.display = 'inline-block'));
-//   }
+  const role = user.role;
 
-//   if (role == 2) {
-//     menuBoutiquier.forEach(el => (el.style.display = 'inline-block'));
-//   }
-// }
+  if (role == "admin") {
+    menuAdmin.forEach(el => (el.style.display = 'inline-block'));
+  }
+
+  if (role == "personnel") {
+    menuPersonnel.forEach(el => (el.style.display = 'inline-block'));
+  }
+
+  if (role == "medecin") {
+    menuMedcin.forEach(el => (el.style.display = 'inline-block'));
+  }
+}

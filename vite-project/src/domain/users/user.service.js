@@ -47,6 +47,19 @@ export class UserService {
     const dto = await this.service.get(id);
     return new User(dto);
   }
+  async getByTel(tel) {
+  if (!tel) throw new Error('telephone inexistant');
+  const data = await this.service.getByTel(tel);
+  console.log(data);
+  
+  return data; // inutile de refaire new User(dto)
+}
+
+  // async getByTel(tel) {
+  //   if (!tel) throw new Error('telephone inexistant');
+  //   const dto = await this.service.getByTel(tel);
+  //   return new User(dto);
+  // }
 
   // async listBoutiquiers() {
   //   const allUsers = await this.service.list(); // suppose que `list()` retourne tous les utilisateurs

@@ -18,17 +18,7 @@ export class UserServices  {
   }
 
   /* ---------- CREATE ---------- */
-//   create(cat) {
-    // on retire toujours id : json-server en génèrera un (string ou number)
-//     const { id, ...body } = cat.toDto();
-//     return this.api.post('', body).then(User.fromDto);
-//   }
-//   create(cat) {
-//   const user = (cat instanceof User) ? cat : new User(cat);
-// // on retire toujours id : json-server en génèrera un (string ou number)
-//   const { id, ...body } = user.toDto();
-//   return this.api.post('admin/create', body).then(User.fromDto);
-// }
+
 
 create(cat) {
   const user = cat instanceof User ? cat : new User(cat);
@@ -58,29 +48,36 @@ create(cat) {
   /* ---------- SOFT-DELETE / RESTORE ---------- */
   trash(id)   { return this._toggle(id, true ); }
   restore(id) { return this._toggle(id, false); }
+  
 
-//   _toggle(id, del) {
+    async _toggle(id, del) {
+    if (id == null) throw new Error('id manquant');
+    // choisir la bonne route
+    const endpoint = del 
+      ? `admin/desactiver/${id}` 
+      : `admin/restaurer/${id}`;
+
+    return this.api.patch(endpoint).then(User.fromDto);
+  }
+
+//     _toggle(id, del) {
 //     if (id == null) throw new Error('id manquant');
 //     return this.api
-//       .patch('', id, { deleted: del })
+//       .patch(id, { deleted: del })
 //       .then(User.fromDto);
 //   }
-//    async get(id) {
-//     const { data } = await this.api.get(id);
-//     return User.fromDto(data);
-//   }
-
-    _toggle(id, del) {
-    if (id == null) throw new Error('id manquant');
-    return this.api
-      .patch(id, { deleted: del })
-      .then(User.fromDto);
-  }
 
   async get(id) {
     const data = await this.api.get(id);
     return User.fromDto(data);
   }
+
+  async getByTel(tel) {
+  const data = await this.api.get(`admin/userByTel/${tel}`);
+  console.log(data.data);
+  return data.data.map(User.fromDto);
+
+}
 
   
 }

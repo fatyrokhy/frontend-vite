@@ -1,4 +1,5 @@
 import { ConnexionServices } from "../../data/service/connexionService";
+import { getLoggedUser } from "../../utils/format/auth";
 
 export default class ConnexionScreen {
   constructor(root) {
@@ -87,11 +88,9 @@ export default class ConnexionScreen {
 
             if (users !=null) {
              
-              localStorage.setItem('user', JSON.stringify(users));
+              const user= getLoggedUser();
 
-            const user=users.role;
-
-            switch (user) {
+            switch (user.role) {
               case "admin":
                   window.location.hash = '#dashboardAdmin';
                   break;
