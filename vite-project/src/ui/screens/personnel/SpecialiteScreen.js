@@ -1,19 +1,15 @@
-import { Modal } from "../../components/Modal.js";
-import { UserService } from "../../../domain/users/user.service.js";
-import { UserServices } from "../../../data/service/userService.js";
-import { User } from "../../../domain/users/User.js";
-import { uploadImageToCloudinary } from "../../../utils/cloudinary.js";
 import { SpecialiteServices } from "../../../data/service/specialiteService.js";
+import { SpecialiteService } from "../../../domain/specialite/specialite.service.js";
+import { Modal } from "../../components/Modal.js";
 
 export default class UsersScreen {
    static status = true;  
   constructor(root) {
     this.root = root;
-    this.userSvc = new UserService(new UserServices());
-    this.specSvc = new SpecialiteServices();
+    this.userSvc = new SpecialiteService(new SpecialiteServices());
     this.state = {
       page: 1,
-      perPage: 8,
+      perPage: 3,
       total: 0,
       view: 'active', // active | deleted
       display: 'cards', // cards | rows
@@ -52,7 +48,6 @@ export default class UsersScreen {
     `;
 
     await this._load();
-    await this._loadSpecialites();
     this._renderUsers();
     this._renderPager();
     this._bindEvents();
@@ -82,11 +77,6 @@ export default class UsersScreen {
     
     this.state.users = data.filter(u => u.isActive === isActiveView);
     this.state.total = +headers.get('X-Total-Count') || this.state.users.length;
-  }
-
-async _loadSpecialites() {
-    const { data } = await this.specSvc.list(1, 1000); // Charger toutes les spécialités
-    this.state.services = data;
   }
 
 _renderUsers() {
@@ -298,7 +288,7 @@ f.innerHTML = `
       class="w-full border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300"
     >
       <option value="">Sélectionner un rôle</option>
-      <option value="personnel" ${user.role === 'personnel' ? 'selected' : ''}>Personnel</option>
+      <option value="patient" ${user.role === 'patient' ? 'selected' : ''}>Patient</option>
       <option value="medecin" ${user.role === 'medecin' ? 'selected' : ''}>Médecin</option>
       <option value="admin" ${user.role === 'admin' ? 'selected' : ''}>Admin</option>
     </select>
@@ -307,11 +297,9 @@ f.innerHTML = `
       class="w-full border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300" 
       style="display:${user.role === 'medecin' ? 'block' : 'none'}"
     >
-        ${this.state.services.map(s => `
-        <option value="${s.id}" ${s.id === user.specialiteId ? 'selected' : ''}>
-        ${s.libelle}
-        </option>
-        `).join('')}
+      <option value="">Choisir spécialité</option>
+      <option value="cardiologie" ${user.specialite === 'cardiologie' ? 'selected' : ''}>Cardiologie</option>
+      <option value="dermatologie" ${user.specialite === 'dermatologie' ? 'selected' : ''}>Dermatologie</option>
     </select>
     <input 
       name="image" 

@@ -13,10 +13,5 @@ export default class RvScreen {
         Bienvenue docteur
     </div>
       `;
-    this.setUpEventListeners();
-
-    this.setUpEventListeners();
-// ré-attache après chaque render
-    // return this;
-    
+    return this;
   }}

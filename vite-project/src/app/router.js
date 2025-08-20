@@ -4,6 +4,9 @@
 //  *   '#articles': () => import('../ui/screens/ArticleScreen.js'),
 //  *   '#articles/(\\w+)': () => import('../ui/screens/ArticleDetailScreen.js')
 //  * }
+
+import { getLoggedUser } from "../utils/format/auth";
+
 //  */
 export function startRouter(root, routes, fallback = '#categories') {
   async function load() {
@@ -46,6 +49,26 @@ export function startRouter(root, routes, fallback = '#categories') {
   window.addEventListener('hashchange', load);
   load();
 }
+
+
+export function guardRoute(page) {
+  const user = getLoggedUser();
+
+  if (!user) {
+    window.location.hash = "#login";
+    return;
+  }
+
+  if (page === "#login") {
+    if (user.role === "admin") window.location.hash = "#dashboardAdmin";
+    else if (user.role === "personnel") window.location.hash = "#dashboardPersonnel";
+    else if (user.role === "medecin") window.location.hash = "#medcin";
+    return;
+  }
+
+  // autres guards si nécessaire
+}
+
 // /**
 //  * Mini-routeur hash.
 //  * routes: { '#categories': () => import('../ui/screens/CategoryScreen.js') }

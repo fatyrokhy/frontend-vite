@@ -1,5 +1,5 @@
 import './style.css';
-import { startRouter } from './app/router.js';
+import { guardRoute, startRouter } from './app/router.js';
 import { renderHeader } from './ui/components/header.js';
 import { sidebar } from './ui/components/sidebar.js';
 import { ConnexionServices } from './data/service/connexionService.js';
@@ -22,9 +22,6 @@ const connexionServices = new ConnexionServices;
 window.addEventListener('hashchange', renderLayoutIfNeeded);
 renderLayoutIfNeeded();
 
-// Appel de la protection au chargement et au changement de hash
-// window.addEventListener('load', protectRoutes);
-// window.addEventListener('hashchange', protectRoutes);
 
 document.addEventListener('click', (e) => {
     if (e.target.closest('#logout')) {
@@ -45,37 +42,10 @@ function renderLayoutIfNeeded() {
     }
 }
 
-// function protectRoutes() {
-//     const user = JSON.parse(localStorage.getItem('user'));
-//     const currentHash = window.location.hash || '#login';
-
-//     if (!user) {
-//         // Si pas connecté, bloquer toutes les pages sauf login
-//         if (!routes.public.includes(currentHash)) {
-//             window.location.hash = '#login';
-//         }
-//     } else {
-//         // Bloquer retour vers login si déjà connecté
-//         if (currentHash === '#login') {
-//             const role = user.role; // Assure-toi que 'role' est dans l'objet user
-//             window.location.hash = routes[role][0]; // Redirige vers page principale du rôle
-//         }
-
-//         // Bloquer accès aux pages des autres rôles
-//         const allowedPages = routes[user.role];
-//         if (!allowedPages.includes(currentHash) && !routes.public.includes(currentHash)) {
-//             window.location.hash = allowedPages[0]; // Redirige vers page principale du rôle
-//         }
-//     }
-// }
-
-// 🔁Quand on charge la page ou qu'on change de hash
-
 window.addEventListener('DOMContentLoaded', afficherMenusSelonRole);
 window.addEventListener('hashchange', afficherMenusSelonRole);
 
 //  Masquer/afficher les liens selon le rôle
-
 function afficherMenusSelonRole() {
 
   const user = getLoggedUser();
@@ -105,3 +75,11 @@ function afficherMenusSelonRole() {
     menuMedcin.forEach(el => (el.style.display = 'inline-block'));
   }
 }
+
+
+window.addEventListener("hashchange", () => {
+  guardRoute(window.location.hash);
+});
+
+// au premier chargement
+guardRoute(window.location.hash || "#login");

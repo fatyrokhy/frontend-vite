@@ -80,13 +80,14 @@ export default class ConnexionScreen {
         const formData = new FormData(form);
         const mail=formData.get("email");
         const pass=formData.get("password");
+        const error=this.root.querySelector("#errorMsg")
 
         try {
 
             const users = await this.connexionServices.login(mail,pass);
             console.log(users);
 
-            if (users !=null) {
+            if (users !=null ) {
              
               const user= getLoggedUser();
 
@@ -101,16 +102,17 @@ export default class ConnexionScreen {
                     window.location.hash = '#medcin';
                     break;
                 default:
-                    alert("Rôle inconnu ou non autorisé.")
+                   error.classList.remove("hidden")
+                    error.textContent="Rôle inconnu ."
                     break;
             }
-          }
-            
-        } catch (error) {
-               console.error("Erreur de connexion :", error);
-                alert("Une erreur est survenue."); 
-        }
-
+          }  else{
+            error.classList.remove("hidden")
+            error.textContent = "Vous n'avez pas l'autorisation d'accès."          }
+        } catch (err) {
+               console.error("Erreur de connexion :", err);
+              error.classList.remove("hidden")
+              error.textContent = "Vous n'avez pas l'autorisation d'accès."        }
         console.log(mail);
         console.log(pass);
     }

@@ -29,13 +29,13 @@ export function sidebar() {
       </a>
     </div>
     <div class="medcin">
-      <a href="#dasboardPersonnel" class="flex items-center gap-4 text-gray-700 hover:text-blue-600">
+      <a href="#medcin" class="flex items-center gap-4 text-gray-700 hover:text-blue-600">
       <i class="ri-list-view text-lg"></i>
         <span>Mes Rendez-vous</span>
       </a>
     </div>
     <div class="medcin">
-      <a href="#dasboardPersonnel" class="flex items-center gap-4 text-gray-700 hover:text-blue-600">
+      <a href="#mesPresciptions" class="flex items-center gap-4 text-gray-700 hover:text-blue-600">
       <i class="ri-list-view text-lg"></i>
         <span>Mes prescriptions</span>
       </a>

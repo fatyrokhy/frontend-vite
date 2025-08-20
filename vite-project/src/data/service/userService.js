@@ -19,7 +19,6 @@ export class UserServices  {
 
   /* ---------- CREATE ---------- */
 
-
 create(cat) {
   const user = cat instanceof User ? cat : new User(cat);
   const { id, password, ...body } = user.toDto();
@@ -36,8 +35,6 @@ create(cat) {
 
   return this.api.post('admin/create', body).then(User.fromDto);
 }
-
-
 
   /* ---------- UPDATE ---------- */
     update(user) {
@@ -60,24 +57,22 @@ create(cat) {
     return this.api.patch(endpoint).then(User.fromDto);
   }
 
-//     _toggle(id, del) {
-//     if (id == null) throw new Error('id manquant');
-//     return this.api
-//       .patch(id, { deleted: del })
-//       .then(User.fromDto);
-//   }
 
   async get(id) {
     const data = await this.api.get(id);
     return User.fromDto(data);
   }
 
-  async getByTel(tel) {
-  const data = await this.api.get(`admin/userByTel/${tel}`);
-  console.log(data.data);
+  async getByTel(tel, statut) {
+    
+    const data = await this.api.get(`admin/userByTel`, {
+        telephone: tel,
+        statut: statut
+    
+    });
+    console.log(data.data);
   return data.data.map(User.fromDto);
 
 }
-
   
 }

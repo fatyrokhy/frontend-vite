@@ -1,6 +1,6 @@
-import { User } from './User.js';
+import { Specialite } from './Specialite.js';
 
-export class UserService {
+export class SpecialiteService {
   constructor(service) {
     this.service = service; // service doit avoir les méthodes .list, .create, etc.
   }
@@ -9,27 +9,27 @@ export class UserService {
     return this.service.list(page, limit);
   }
 
-  async create(user) {
-    if (!(user instanceof User)) {
-      user = new User(user);
+  async create(spec) {
+    if (!(spec instanceof Specialite)) {
+      spec = new Specialite(spec);
     }
-    if (!user.isValid()) {
+    if (!spec.isValid()) {
       throw new Error('Utilisateur invalide');
     }
-    return this.service.create(user.toDto());
+    return this.service.create(spec.toDto());
   }
 
-  async update(user) {
-    if (!(user instanceof User)) {
-      user = new User(user);
+  async update(spec) {
+    if (!(spec instanceof Specialite)) {
+      spec = new Specialite(spec);
     }
-    if (!user.id) {
+    if (!spec.id) {
       throw new Error('ID manquant pour la mise à jour');
     }
-    if (!user.isValid()) {
+    if (!spec.isValid()) {
       throw new Error('Utilisateur invalide');
     }
-    return this.service.update(user.toDto());
+    return this.service.update(spec.toDto());
   }
 
   async trash(id) {
@@ -45,14 +45,14 @@ export class UserService {
   async get(id) {
     if (!id) throw new Error('ID manquant');
     const dto = await this.service.get(id);
-    return new User(dto);
+    return new Specialite(dto);
   }
-  async getByTel(tel, status) {
-  if (!tel) throw new Error('telephone inexistant');
-  const data = await this.service.getByTel(tel, status);
-  console.log(data);
+//   async getByTel(tel, status) {
+//   if (!tel) throw new Error('telephone inexistant');
+//   const data = await this.service.getByTel(tel, status);
+//   console.log(data);
   
-  return data; // inutile de refaire new User(dto)
-}
+//   return data; // inutile de refaire new User(dto)
+// }
   
 }
